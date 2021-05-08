@@ -54,7 +54,7 @@ def retrieve_captions():
     images = test_transform(img)
     images = torch.reshape(images, (1, images.shape[0], images.shape[1], images.shape[2]))
 
-    captions = test_sort['caption_id'][:25]
+    captions = test_sort['caption_id']
     caption_lengths = torch.tensor([len(c) for c in captions])
     captions = torch.tensor([c + [0]*(100-len(c)) for c in captions])
 
@@ -87,7 +87,7 @@ def retrieve_images(caption):
     indexed_caption += [0] * (100 - len(indexed_caption))
     captions = torch.tensor([indexed_caption])
 
-    paths = test_sort['images_path'][:25]
+    paths = test_sort['images_path']
     images = []
     for img_path in paths:
         img = imread('static/'+img_path)
