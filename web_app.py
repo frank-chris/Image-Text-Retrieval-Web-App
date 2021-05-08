@@ -4,6 +4,7 @@ from PIL import Image
 import shutil
 import pickle
 import string
+import time
 from imageio import imread
 import numpy as np
 import torch
@@ -49,7 +50,7 @@ def index_to_word(indexed_caption):
     return ' '.join(caption[1:-1])
 
 def retrieve_captions():
-    img = imread('static/temp/image.jpg')
+    img = imread('static/temp/'+os.listdir('static/temp/')[-1])
     img = np.array(Image.fromarray(img).resize(size=(224,224)))
     images = test_transform(img)
     images = torch.reshape(images, (1, images.shape[0], images.shape[1], images.shape[2]))
@@ -64,7 +65,7 @@ def retrieve_captions():
     sim = torch.matmul(text_embeddings, image_embeddings.t())
     ind = sim.topk(20, 0)[1].reshape(-1)
 
-    retrieved_captions = ['temp/image.jpg']
+    retrieved_captions = ['temp/'+os.listdir('static/temp/')[-1]]
     for i in ind:
         retrieved_captions.append(index_to_word(test_sort['caption_id'][i]))
 
@@ -115,7 +116,9 @@ def get_query(request):
     
     try:
         image = request.files['imagequery']
-        image.save('static/temp/image.jpg')
+        for fname in os.listdir('static/temp'):
+            os.remove('static/temp/'+fname)
+        image.save('static/temp/'+str(int(time.time()))+'.jpg')
     except:
         image = None
 
