@@ -13,9 +13,11 @@ from test_config import config
 from config import network_config
 from werkzeug.utils import secure_filename
 from flask import Flask, render_template, flash, request, redirect, url_for
+from flask_ngrok import run_with_ngrok
 
 app = Flask(__name__)
 app.debug = True
+run_with_ngrok(app)
 network = None
 model_path = 'saved_model/299.pth.tar'
 test_sort_path = 'saved_model/test_sort.pkl'
